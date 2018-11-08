@@ -27,6 +27,10 @@ if (autoRegHost && typeof(autoRegHost) !== 'boolean') {
     autoRegHost = (autoRegHost === 'true');
 }
 
+var regEnvironment = (process.env.SOAJS_ENV || "dev");
+regEnvironment = regEnvironment.toLowerCase();
+
+
 /**
  *
  */
@@ -181,7 +185,7 @@ controller.prototype.init = function (callback) {
 		                            "ip": _self.serviceIp,
 		                            "ts": response.ts ,
 		                            "data": soajsUtils.cloneObj(response.data),
-		                            "env": process.env.SOAJS_ENV.toLowerCase()
+		                            "env": regEnvironment
                             	}, function(error){
                             		if(error){
                             		    _self.log.error(error);
@@ -255,6 +259,10 @@ controller.prototype.init = function (callback) {
                         else if (parsedUrl.pathname === '/getRegistry'){
                             var reqEnv = parsedUrl.query.env;
                             var reqServiceName = parsedUrl.query.serviceName;
+
+                            if(!reqEnv) {
+                                reqEnv = regEnvironment;
+                            }
                             core.registry.loadByEnv({"envCode": reqEnv, "serviceName": "controller", "donotBbuildSpecificRegistry": false},function (err, reg){
                                 var response = maintenanceResponse(req);
                                 if (err){
@@ -333,7 +341,10 @@ controller.prototype.init = function (callback) {
 	                var mt_mw = require("./../mw/mt/index");
 	                app.use(mt_mw({"soajs": _self.soajs, "app": app, "param": _self.soajs.param}));
 	                _self.log.info("SOAJS MT middleware initialization done.");
-	
+
+                    var traffic_mw = require("./../mw/traffic/index");
+                    app.use(traffic_mw());
+
 	                app.use(function (req, res, next) {
 		                setImmediate(function () {
 			                req.soajs.controller.gotoservice(req, res, null);
@@ -413,7 +424,7 @@ controller.prototype.start = function (cb) {
 			    "ip": _self.serviceIp,
 			    "ts": awarenessStatData.ts ,
 			    "data": awarenessStatData.data,
-			    "env": process.env.SOAJS_ENV.toLowerCase()
+			    "env": regEnvironment
 		    }, cb);
 	    }
     }
@@ -428,6 +439,7 @@ controller.prototype.start = function (cb) {
                 core.registry.registerHost({
                     "serviceName": _self.serviceName,
                     "serviceVersion": _self.serviceVersion,
+	                "servicePort": _self.registry.services.controller.port,
                     "serviceIp": _self.serviceIp,
                     "serviceHATask": _self.serviceHATask
                 }, _self.registry, function (registered) {
