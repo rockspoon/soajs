@@ -45,6 +45,6 @@
     "newrelic": "^6.9.0",
     "request": "2.88.2",
     "soajs.core.libs": "1.2.0",
-    "soajs.core.modules": "github:rockspoon/soajs.core.modules#f9f8106bd569f10253eb470389a88a67eef7d6f4"
+    "soajs.core.modules": "github:rockspoon/soajs.core.modules#de55c9ac7ee104179423a90afc40810b83b1fda6"
   }
 }
