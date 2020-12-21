@@ -42,8 +42,9 @@
     "jsontoxml": "1.0.1",
     "merge": "1.2.1",
     "method-override": "3.0.0",
+    "newrelic": "^6.9.0",
     "request": "2.88.2",
     "soajs.core.libs": "1.2.0",
-    "soajs.core.modules": "5.0.3"
+    "soajs.core.modules": "github:rockspoon/soajs.core.modules#de55c9ac7ee104179423a90afc40810b83b1fda6"
   }
 }

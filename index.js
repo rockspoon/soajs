@@ -1,5 +1,6 @@
 'use strict';
 
+require('newrelic')
 require("./classes/http");
 const coreModules = require("soajs.core.modules");
 const coreLibs = require("soajs.core.libs");
